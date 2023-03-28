@@ -45,6 +45,10 @@ public class UserDetailsManagerImp implements UserDetailsManager {
         Set <GrantedAuthority> authorities = new HashSet<>();
 //        authorities = roles.stream().forEach(role ->
 //                new SimpleGrantedAuthority(role.getPermissions().toString())).collect(Collectors.toSet());
+
+
+
+
         for (Role role: roles){
             for (Permission permission: role.getPermissions()){
                 authorities.add(new SimpleGrantedAuthority(permission.getAuthority()));
