@@ -49,11 +49,6 @@ public class UserDetailsManagerImp implements UserDetailsManager {
         }
         return authorities;
     }
-//    public Set<GrantedAuthority> getPermissions(Set<Role> roles) {
-//        Set <GrantedAuthority> authorities = new HashSet<>();
-//        for (Role role: roles) authorities.addAll(role.getAuthorities());
-//        return authorities;
-//    }
 
     @Override
     public void createUser(UserDetails user) {  }
