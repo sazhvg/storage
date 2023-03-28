@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.in.storage.security.UserDetailsManagerImp;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -41,6 +42,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final UserDetailsManagerImp userDetailsManagerImp;
 
     public void signup(RegisterRequest registerRequest) {
         User user = new User();

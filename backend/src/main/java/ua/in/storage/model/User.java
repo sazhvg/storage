@@ -1,16 +1,14 @@
 package ua.in.storage.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ua.in.storage.model.enums.Role;
 import ua.in.storage.model.enums.Status;
 
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -20,8 +18,10 @@ import java.util.Set;
 @Table(name = "users"/*,uniqueConstraints = {*//*@UniqueConstraint(columnNames = "username"),*//* @UniqueConstraint(columnNames = "email")}*/)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long userId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userId;
     @Column(name = "email", unique = true, columnDefinition = "VARCHAR(55) CHECK (email LIKE '%_@__%.__%')", nullable = false)
     private String email;
     @Column(name = "password", nullable = false)
@@ -43,3 +43,5 @@ public class User {
     private Status status;
 }
 
+//https://www.youtube.com/watch?v=FoyAvzU5fO0&t=866s
+// Можливо зробити implements UserDetails (відео 4.07)

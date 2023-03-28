@@ -49,4 +49,9 @@ public class AuthController {
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
         return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> verifyTest() {
+        return new ResponseEntity<>("Verify Test Successfully", OK);
+    }
 }
