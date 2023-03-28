@@ -15,6 +15,7 @@ import ua.in.storage.model.enums.Status;
 import ua.in.storage.repository.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -42,6 +43,8 @@ public class UserDetailsManagerImp implements UserDetailsManager {
 
     public Set<GrantedAuthority> getAuth(Set<Role> roles) {
         Set <GrantedAuthority> authorities = new HashSet<>();
+//        authorities = roles.stream().forEach(role ->
+//                new SimpleGrantedAuthority(role.getPermissions().toString())).collect(Collectors.toSet());
         for (Role role: roles){
             for (Permission permission: role.getPermissions()){
                 authorities.add(new SimpleGrantedAuthority(permission.getAuthority()));
@@ -74,10 +77,4 @@ public class UserDetailsManagerImp implements UserDetailsManager {
 
 
 //    List<String> roles = getAuthorities(user.getRoles()).stream().map(Role::getPermissions).toList();
-
-    //          return new org.springframework.security
-//                  .core.userdetails.User(user.getUsername(), user.getPassword(),
-//                  user.isEnabled(), true, true,
-//                  true, getAuthorities("USER"));
-//}
 }
