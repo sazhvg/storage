@@ -1,7 +1,6 @@
 package ua.in.storage.security;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,23 +37,18 @@ public class UserDetailsManagerImp implements UserDetailsManager {
                 user.getStatus().equals(Status.ACTIVE),
                 user.getStatus().equals(Status.ACTIVE),
                 user.getStatus().equals(Status.ACTIVE),
-                getAuth(user.getRoles()));
+                getAuth(user.getRoles())
+                        .stream().map(permission ->
+                                new SimpleGrantedAuthority(permission.getAuthority()))
+                        .collect(Collectors.toSet()));//getAuth(user.getRoles()));
     }
 
-    public Set<GrantedAuthority> getAuth(Set<Role> roles) {
-        Set <GrantedAuthority> authorities = new HashSet<>();
-//        authorities = roles.stream().forEach(role ->
-//                new SimpleGrantedAuthority(role.getPermissions().toString())).collect(Collectors.toSet());
+    public Set<Permission> getAuth(Set<Role> roles) {
 
+        Set <Permission> permissionSet = new HashSet<>();
+        for (Role role: roles) permissionSet.addAll(role.getPermissions());
+        return permissionSet;
 
-
-
-        for (Role role: roles){
-            for (Permission permission: role.getPermissions()){
-                authorities.add(new SimpleGrantedAuthority(permission.getAuthority()));
-            }
-        }
-        return authorities;
     }
 
     @Override
@@ -69,16 +63,4 @@ public class UserDetailsManagerImp implements UserDetailsManager {
     public boolean userExists(String username) {
         return false;
     }
-
-//    private Set<SimpleGrantedAuthority> detAuth (Set<Role> roles) {
-//        Set <GrantedAuthority> authorities = new HashSet<>();
-////        for (Role role: roles) authorities.addAll(role.getAuthorities());
-////        return authorities;
-////        return  authorities.stream(roles.addAll()).collect(Collectors.toSet());
-//        return roles.stream().map(Role::getAuthorities).collect(Collectors.toSet());
-//        //        List<String> roles = getAuthorities(user.getRoles()).stream().map(Role::getPermissions).toList();
-//    }
-
-
-//    List<String> roles = getAuthorities(user.getRoles()).stream().map(Role::getPermissions).toList();
 }
