@@ -16,7 +16,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+        <kotlin.version>1.7.22</kotlin.version>
     </properties>
 
     <dependencies>
@@ -70,14 +71,14 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-<!--
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${org.mapstruct.version}</version>
+<!--
             <scope>compile</scope>
-        </dependency>
 -->
+        </dependency>
         <!-- Spring Fox Dependencies -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -90,63 +91,84 @@
             <version>2.0.3</version>
         </dependency>
         <!-- For Displaying time as Relative Time Ago ("Posted 1 Day ago")-->
-
         <dependency>
             <groupId>com.github.marlonlom</groupId>
             <artifactId>timeago</artifactId>
             <version>4.0.3</version>
         </dependency>
+<!--
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+-->
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-maven-plugin -->
+<!--
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-plugin</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>provided</scope>
+        </dependency>
+-->
+
+<!--
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
+-->
         <!--        <dependency>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib-jdk8</artifactId>
-                    <version>${kotlin.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-test-junit</artifactId>
-                    <version>${kotlin.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
                     <groupId>org.testcontainers</groupId>
                     <artifactId>mysql</artifactId>
                     <scope>test</scope>
                 </dependency>
-                <dependency>
-                    <groupId>org.testcontainers</groupId>
-                    <artifactId>junit-jupiter</artifactId>
-                    <scope>test</scope>
-                </dependency>
         -->
+<!--
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+-->
 
-
+        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
+        Документація http://springfox.github.io/springfox/docs/current/#configuring-the-objectmapper
+        для виводу структури запитів. На цей час не працює.
+        -->
+<!--
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+-->
     </dependencies>
 
     <build>
         <plugins>
-<!--
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
--->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
-                <!--   or newer version   -->
+                <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <!--   depending on your project   -->
-                    <target>${java.version}</target>
-                    <!--   depending on your project   -->
-<!--
+                    <source>${java.version}</source> <!-- depending on your project -->
+                    <target>${java.version}</target> <!-- depending on your project -->
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
                             <version>${org.mapstruct.version}</version>
                         </path>
+                        <!-- other annotation processors -->
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
@@ -158,24 +180,29 @@
                             <version>0.2.0</version>
                         </path>
                     </annotationProcessorPaths>
--->
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <source>src/main/java</source>
+                                <source>target/generated-sources/annotations</source>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
-
 
 </project>

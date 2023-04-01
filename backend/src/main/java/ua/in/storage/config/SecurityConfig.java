@@ -12,10 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +24,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ua.in.storage.security.UserDetailsManagerImp;
 
@@ -40,14 +37,8 @@ import java.security.interfaces.RSAPublicKey;
 //@EnableWebSecurity
 public class SecurityConfig {
 
-
-
-
-
-
     private static final String [] FREE_POINT_G = new String[] {
-    //        "/api/auth/**",
-    //        "/api/auth/test",
+            "/api/auth/**",
             "/v2/api-docs",
             "/configuration/ui",
             "/swagger-resources/**",
@@ -56,9 +47,31 @@ public class SecurityConfig {
             "/webjars/**"};
     private static final String [] FREE_POINT_P = new String[] {
             "/api/auth/login",
+            "/api/auth/refresh/token",
+            "/api/auth/logout",
             "/api/auth/signup"};
     private static final String [] ADMIN_POINT_G = new String[] {
-            "/api/auth/test"
+            "/api/auth/test",
+            "/api/subreddit",
+            "/api/subreddit/**",
+            "/api/posts/**",
+            "/api/posts",
+            "/api/comments/**",
+            "/api/comments"};
+    private static final String [] ADMIN_POINT_P = new String[] {
+            "/api/subreddit",
+            "/api/subreddit/**",
+            "/api/posts/**",
+            "/api/posts",
+            "/api/comments/**",
+            "/api/comments"};
+    private static final String [] USER_POINT_G = new String[] {
+//            "/api/subreddit",
+//            "/api/subreddit/**",
+    };
+    private static final String [] USER_POINT_P = new String[] {
+//            "/api/subreddit",
+//            "/api/subreddit/**",
     };
     @Value("${jwt.public.key}")
     RSAPublicKey publicKey;
@@ -96,11 +109,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, FREE_POINT_G).permitAll()
                         .requestMatchers(HttpMethod.POST, FREE_POINT_P).permitAll()
-//                        .requestMatchers(HttpMethod.GET, ADMIN_POINT_G).hasAnyRole("SCOPE_ROLE_ADMIN", "ROLE_ADMIN", "ADMIN" )
-//                        .requestMatchers(HttpMethod.GET, ADMIN_POINT_G).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/auth/test").hasAnyAuthority("SCOPE_admin")
-                        .requestMatchers(HttpMethod.GET, "/api/auth/test2").hasAnyAuthority("SCOPE_user2")
-//                        .requestMatchers(HttpMethod.GET, ADMIN_POINT_G).hasAuthority("SCOPE_admin")
+                        .requestMatchers(HttpMethod.GET, ADMIN_POINT_G).hasAnyAuthority("SCOPE_admin")
+                        .requestMatchers(HttpMethod.POST, ADMIN_POINT_P).hasAnyAuthority("SCOPE_admin")
+                        .requestMatchers(HttpMethod.GET, "/api/auth/test2").hasAnyAuthority("SCOPE_user")
+                        .requestMatchers(HttpMethod.POST, "/api/auth/test2").hasAnyAuthority("SCOPE_user")
 //                        .requestMatchers(HttpMethod.GET, "/api/subreddit").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/posts/").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()

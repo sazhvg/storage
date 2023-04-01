@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+//@EnableOpenApi
 public class OpenAPIConfiguration {
-
 
     @Bean
     public OpenAPI expenseAPI() {
